@@ -1,0 +1,479 @@
+import math
+import random
+import sys
+# Character name, max and min characters:
+
+while True:
+    cname = input("your character name: ")
+    if len(cname) < 4:
+        print("Name must be at least 4 characters.")
+    elif len(cname) > 10:
+        print("Name must be a maximum of 10 characters.")
+    else:
+        print(f"""
+    
+welcome prince {cname} to your father's medieval kingdom!""")
+        break
+
+# the story:
+
+print(f"""
+
+After reaching adulthood, {cname} is summoned to his father's throne room,
+where the King gives him an important task: 
+Prince {cname} needs to travel to the western lands of his father's kingdom
+where a small group of bandits made camp and are wreaking havoc on western villages. 
+Due to the threat from the eastern kingdom the King can spare {cname} only 
+[2 soldiers] and his [lucky golden ring]. 
+If prince {cname} succeeds, he will be granted lordship of the western lands.
+The king finishes with "May luck guide you to victory!" """)
+# def continue
+
+
+def proceed():
+    while True:
+        proceed_script = input("\n'C'ontinue... > ")
+        if proceed_script.upper() == "C":
+            break
+        else:
+            print("press C to continue")
+
+
+proceed()
+
+# inventory check, def:
+
+number_of_soldiers = 2
+number_of_lucky_charms = 1
+war_cry = False
+
+
+def inventory_check():
+    print(f"""Prince {cname} now has 
+[{number_of_soldiers} soldiers], and [{number_of_lucky_charms} lucky charm].""")
+    if war_cry is True:
+        print("\nThe group also learned the [war cry] ability.")
+
+
+inventory_check()
+
+proceed()
+
+# the story
+
+print(f"""\nAfter 4 days of traveling {cname} stumbles upon a royal scout who warns
+him that the bandit group is a lot bigger and more organised than expected and 2 soldiers will not be enough to repel 
+them. "There is not enough time to return to the King, but you can find more able soldiers in 5 villages on the way. The
+bandits can be stopped if you destroy their outpost." adds the scout before continuing his journey to warn the King.""")
+
+proceed()
+
+
+# storing all 5 villages
+
+
+def village_witch():
+    global number_of_soldiers, number_of_lucky_charms
+    print(f"""\nThe next day {cname} arrives to a murky village located in a bog, where he's greeted by
+a dark witch. Before the prince says anything, the witch says: "the prophecy foretold of your arrival. 
+I can offer you support in your quest for something in return:
+a) offer [1 lucky charm] to summon [3 soldiers] from the bog,
+b) offer [2 soldiers] to create [1 lucky charm] from their souls,
+c) decline her support and continue on...""")
+
+# decision
+    while True:
+        decision = input("choose > ")
+        if decision.lower() == "a":
+            if number_of_lucky_charms <= 0:
+                print("no lucky charms!")
+            else:
+                number_of_soldiers = number_of_soldiers + 3
+                number_of_lucky_charms = number_of_lucky_charms - 1
+                print("""\nThe witch starts chanting... your lucky charm turned to ash and 3 muddy zombie-soldiers 
+emerge from the ground.""")
+                break
+        elif decision.lower() == "b":
+            if number_of_soldiers <= 1:
+                print("not enough soldiers!")
+            else:
+                number_of_soldiers = number_of_soldiers - 2
+                number_of_lucky_charms = number_of_lucky_charms + 1
+                print("""\nthe witch starts chanting... 2 of your soldiers scream, while they are pulled into ground. 
+In your hand appears a glass orb with two misty entities inside. """)
+                break
+        elif decision.lower() == "c":
+            print(f"{cname} will not be apart of this foul sorcery!")
+            break
+    print(f"""\nWhile leaving the misty bog village the witch warns {cname}: 
+"beware, your next decisions might be your last." """)
+
+    proceed()
+    inventory_check()
+    proceed()
+
+
+def village_hill():
+    global number_of_soldiers, number_of_lucky_charms, war_cry
+    print(f"""\nWhile marching on the paved road, {cname} hears a loud, scary echo from a nearby hill. 
+He investigates and finds himself on a small hill village filled with goats and a few big, strong herders.
+After bowing in your honor, they explain the shouts are actually [war cries], which scare off wolfs from the hill
+and keeps their goats safe. The herders offer help in {cname}'s quest:
+a) 2 of the strongest herders join your group.
+b) They teach [war cry] which cripples opponents morale.\n""")
+# decision
+    while True:
+        decision = input("choose > ")
+        if decision.lower() == "a":
+            number_of_soldiers = number_of_soldiers + 2
+            print("the 2 herders bow to you and step into your soldiers ranks.")
+            break
+        elif decision.lower() == "b":
+            war_cry = True
+            print("""\nafter shouting at each other for two hours and a loud ringing
+in your head, you feel like you learned the art.""")
+            break
+        else:
+            print("")
+    print("\nThe group thanks the herders and makes its way downhill.")
+    proceed()
+    inventory_check()
+    proceed()
+
+
+def village_mercenary():
+    # battle parameters
+    global number_of_soldiers, number_of_lucky_charms, war_cry
+    opponent_name = "rogue rabble"
+    opponent_quantity = random.randint(5, 7)
+    opponent_luck = 0.1
+    opponent_break = 2 + int(war_cry)
+
+    # village story
+    print(f"""
+The road goes through the woods. Inside there is... well ... not a village but
+a mercenary encampments. The mercenary captain greets {cname}. After explaining your quest, 
+they offer to join you if you assist them defeating a group of unorganised {opponent_name} deeper in 
+the woods and help them claim their treasure as payment. They do not know how many enemies await.
+a) assist them. 4 mercenaries join your group.
+b) decline their offer.\n""")
+
+# decision
+
+    while True:
+        decision = input("choose > ")
+        if decision.lower() == "a":
+            number_of_soldiers = number_of_soldiers + 4
+            print(f"""\n4 mercenaries join your group. You head deep into the woods 
+where you spot {opponent_quantity} {opponent_name}.""")
+
+            def battle_mode():
+                global war_cry, number_of_soldiers, number_of_lucky_charms
+                nonlocal opponent_luck, opponent_break, opponent_name, opponent_quantity
+                print("\nYour men are in position, battle starts!")
+                if war_cry is True:
+                    opponent_luck = opponent_luck - 0.1
+                    print("\nSoldiers initiate [war cry], enemy's morale is weakened!")
+
+                # decision
+                print("""
+            a) fire a volley of arrows! [luck],[numbers]
+            b) charge them head on! [numbers]""")
+
+                while True:
+                    decision = input("\nchoose > ")
+                    if decision.lower() == "a":
+                        # firing at enemy
+                        base_hit_chance = random.uniform(0.2, 0.5)
+                        luck_hit_chance = base_hit_chance + (number_of_lucky_charms / 10) - opponent_luck
+                        luck_hit_chance = round(luck_hit_chance, 1)
+                        num_of_casualties = (luck_hit_chance * number_of_soldiers)
+                        num_of_casualties = (math.floor(num_of_casualties))
+                        opponent_quantity = opponent_quantity - num_of_casualties
+                        print(f"""\n{cname}'s soldiers fire {number_of_soldiers} arrows and kill {num_of_casualties}
+{opponent_name}. {opponent_quantity} enemies remain.""")
+                        proceed()
+                        if opponent_quantity <= opponent_break:
+                            print("Enemies being to few of numbers, flee the battlefield.")
+                            break
+                        # receiving fire
+                        base_hit_chance = random.uniform(0.2, 0.5)
+                        luck_hit_chance = base_hit_chance + opponent_luck - (number_of_lucky_charms / 10)
+                        luck_hit_chance = round(luck_hit_chance, 1)
+                        num_of_casualties = (luck_hit_chance * opponent_quantity)
+                        num_of_casualties = (math.floor(num_of_casualties))
+                        if num_of_casualties >= number_of_soldiers:
+                            num_of_casualties = number_of_soldiers
+                        number_of_soldiers = number_of_soldiers - num_of_casualties
+                        print(f"""\n{opponent_name} are firing back!
+            they hit {num_of_casualties} of {cname}'s soldiers. 
+            {number_of_soldiers} remain to fight.""")
+                        if number_of_soldiers == 0:
+                            print(f"""
+            after all your troops lay on the ground, {cname} turns around to flee.
+            but before he could start running, an arrow pierces his chest and he dies ... game over.""")
+                            sys.exit()
+
+                    elif decision.lower() == "b":
+                        # charge head on
+                        if number_of_soldiers >= (opponent_quantity - war_cry):
+                            modulus_casualties = (number_of_soldiers % (opponent_quantity - war_cry)) / 10
+                            num_of_casualties = number_of_soldiers * (0.3 - modulus_casualties)
+                            num_of_casualties = math.ceil(float(num_of_casualties))
+                            number_of_soldiers = number_of_soldiers - num_of_casualties
+                            print(f"""\nyou overpowered {opponent_name}! In the fight {num_of_casualties} of
+your soldiers died. {number_of_soldiers} are left standing.""")
+                            break
+                        else:
+                            print(f"\nArmy got overpowered and prince {cname} got killed... Game over.")
+                            sys.exit()
+                    else:
+                        print("")
+            battle_mode()
+
+            print(f"""
+After the fight, mercenary rushed to check the content of the guarded chest. 
+While they cheered over their newly found wealth, you find a [shiny amulet] around one of the 
+{opponent_name}'s neck. Lets hope it brings {cname} more [luck] than its previous owner.""")
+            number_of_lucky_charms = number_of_lucky_charms + 1
+            break
+        elif decision.lower() == "b":
+            print("""You don't have time making dishonorable men rich.""")
+            break
+        else:
+            print("")
+    print("\nThe party continues on.")
+    proceed()
+    inventory_check()
+    proceed()
+
+
+def village_gambler():
+    global number_of_soldiers,number_of_lucky_charms
+    print(f"""\n The next path takes you to a crossroad village. It is filled with traders and caravans. 
+You approach a caravan to meet with a trader, who is surrounded by 3 strong [bodyguards]. After you explain 
+the situation offers you some choices:
+a) Trade 1 [lucky charm] for his 3 [bodyguards].
+b) Stake your 1 [lucky charm] against his 3 [bodyguards] in a gambling game - Winner takes all.
+c) Leave the village.
+""")
+# decision
+    while True:
+        decision = input("choose > ")
+        if decision.lower() == "a":
+            if number_of_lucky_charms <= 0:
+                print("no lucky charms!")
+            else:
+                number_of_soldiers = number_of_soldiers + 3
+                number_of_lucky_charms = number_of_lucky_charms - 1
+                print(f"\nThe trader smiles, takes your charm and orders bodyguards to join {cname}'s ranks.\n")
+                break
+        elif decision.lower() == "b":
+            if number_of_lucky_charms <= 0:
+                print("no lucky charms!")
+            else:
+                print("""\nThe trader laughs and says:"so you are a gambler as well. The rules are as follows: 
+We each roll 3 dice. The one with the highest sum of values wins everything. Good [luck]..."\n""")
+            proceed()
+            # gamble sequence
+            while True:
+                highest_number = 6 - number_of_lucky_charms
+                dice_trader = [random.randint(1, highest_number) for x in range(3)]
+                print(f"trader throws: {dice_trader}.")
+                dice_trader_sum = sum(dice_trader)
+                print(f"sum is {dice_trader_sum}.")
+                proceed()
+                lowest_number = number_of_lucky_charms + 1
+                dice_prince = [random.randint(lowest_number, 6) for x in range(3)]
+                print(f"{cname} throws: {dice_prince}.")
+                dice_prince_sum = sum(dice_prince)
+                print(f"sum is {dice_prince_sum}.")
+                proceed()
+                if dice_trader_sum > dice_prince_sum:
+                    number_of_lucky_charms = number_of_lucky_charms - 1
+                    print(f"the trader laughs again, takes {cname}'s [charm] and bids farewell.")
+                    break
+                elif dice_trader_sum < dice_prince_sum:
+                    number_of_soldiers = number_of_soldiers + 3
+                    print(f"""\nthe disappointed trader turns around and storms away, leaving the 
+bodyguards to {cname}.""")
+                    break
+                elif dice_trader_sum == dice_prince_sum:
+                    print("\nthe result is tied. Players pick up their dice and re-roll...")
+            break
+        elif decision.lower() == "c":
+            print(f"""\n{cname}, not liking the deals, respectfully declines.""")
+            break
+        else:
+            print(f"""\nFinding nothing else interesting in the village, {cname}'s troop takes 
+the west road out of the village.""")
+    proceed()
+    inventory_check()
+    proceed()
+
+
+def village_monastery():
+    global number_of_soldiers, number_of_lucky_charms, war_cry
+    print(f"""\n{cname} and his companions arrive to a bridge, leading to a small island on top of which lays
+a monastery village. Inside, you are greeted by monks and their holy guardians. After they ask what you seek, {cname}
+asks them for support to fight bandits in the west. After a quiet debate between themselves,
+they answer {cname}:Gods word binds us to help the chosen King and his successor. 
+Show us omens you acquired on this adventure prince {cname}.""")
+
+    proceed()
+    # inventory analysis and reward calculation
+
+    if number_of_lucky_charms == 0 and war_cry == False:
+        number_of_lucky_charms = number_of_lucky_charms + 1
+        print(f"""\n{cname} has no omens, so the monks bestow him with their holy silver chalice. 
+    "May it bring you courage and good fortune!""")
+    elif (number_of_lucky_charms == 1 and war_cry == False) or (number_of_lucky_charms == 0 and war_cry == True):
+        number_of_soldiers = number_of_soldiers + 2
+        print(f"""\n"Your omen grants you an advantage, but together with our 
+     2 [holy guardians] you will surely be victorious! """)
+    else:
+        number_of_soldiers = number_of_soldiers + 1
+        print(f"""\n"Your omens are plenty, another [guardian] will surely solidify your victory.""")
+
+    print(f"""\nAfter {cname} thanks the monks, the group returns pass the bridge and continues down the road.""")
+    proceed()
+    inventory_check()
+    proceed()
+
+# storing battle function:
+
+
+#shuffling and selecting 4/5 stories
+
+def witch_v():
+    return village_witch()
+
+
+def hill_v():
+    return village_hill()
+
+
+def mercenary_v():
+    return village_mercenary()
+
+
+def gambler_v():
+    return village_gambler()
+
+
+def monastery_v():
+    return village_monastery()
+
+
+def reduced_which_stories(the_list):
+    list_of_indexes = list(range(len(the_list)))
+    random.shuffle(list_of_indexes)
+    list_of_indexes = list_of_indexes[:-1]
+    return list_of_indexes
+
+
+stories = [witch_v, hill_v, mercenary_v, gambler_v, monastery_v]
+which_stories = reduced_which_stories(stories)
+
+for x in which_stories:
+    story = stories[x]
+    aValue = story()
+
+# battle parameters end game
+
+opponent_name = "raiding bandits"
+opponent_quantity = random.randint(10, 12)
+opponent_luck = 0.1
+opponent_break = 2 + int(war_cry)
+
+print(f""" In the distance {cname} spots smoke coming from the next village. It's a group of those bandits!
+With your troops, you rush to help the villagers. All {opponent_quantity} {opponent_name} see you approaching and 
+regroup to defend their position.""")
+
+proceed()
+
+def battle_mode():
+    global war_cry, number_of_soldiers, number_of_lucky_charms
+    global opponent_luck, opponent_break, opponent_name, opponent_quantity
+    print("\nYour men are in position, battle starts!")
+    if war_cry is True:
+        opponent_luck = opponent_luck - 0.1
+        print("\nSoldiers initiate [war cry], enemy's morale is weakened!")
+
+    # decision
+    print("""
+a) fire a volley of arrows! [luck],[numbers]
+b) charge them head on! [numbers]""")
+
+    while True:
+        decision = input("\nchoose > ")
+        if decision.lower() == "a":
+            # firing at enemy
+            base_hit_chance = random.uniform(0.2, 0.5)
+            luck_hit_chance = base_hit_chance + (number_of_lucky_charms / 10) - opponent_luck
+            luck_hit_chance = round(luck_hit_chance, 1)
+            num_of_casualties = (luck_hit_chance * number_of_soldiers)
+            num_of_casualties = (math.floor(num_of_casualties))
+            opponent_quantity = opponent_quantity - num_of_casualties
+            print(f"""\n{cname}'s soldiers fire {number_of_soldiers} arrows and kill {num_of_casualties}
+{opponent_name}. {opponent_quantity} enemies remain.""")
+            proceed()
+            if opponent_quantity <= opponent_break:
+                print("Enemies being to few of numbers, flee the battlefield.")
+                break
+            # receiving fire
+            base_hit_chance = random.uniform(0.2, 0.5)
+            luck_hit_chance = base_hit_chance + opponent_luck - (number_of_lucky_charms / 10)
+            luck_hit_chance = round(luck_hit_chance, 1)
+            num_of_casualties = (luck_hit_chance * opponent_quantity)
+            num_of_casualties = (math.floor(num_of_casualties))
+            if num_of_casualties >= number_of_soldiers:
+                num_of_casualties = number_of_soldiers
+            number_of_soldiers = number_of_soldiers - num_of_casualties
+            print(f"""\n{opponent_name} are firing back!
+they hit {num_of_casualties} of {cname}'s soldiers. 
+{number_of_soldiers} remain to fight.""")
+            if number_of_soldiers == 0:
+                print(f"""
+after all your troops lay on the ground, {cname} turns around to flee.
+but before he could start running, an arrow pierces his chest and he dies ... game over.""")
+                sys.exit()
+
+        elif decision.lower() == "b":
+            # charge head on
+            if number_of_soldiers >= (opponent_quantity - war_cry):
+                modulus_casualties = (number_of_soldiers % (opponent_quantity - war_cry)) / 10
+                num_of_casualties = number_of_soldiers * (0.3 - modulus_casualties)
+                num_of_casualties = math.ceil(float(num_of_casualties))
+                number_of_soldiers = number_of_soldiers - num_of_casualties
+                print(f"""\nyou overpowered {opponent_name}! In the fight {num_of_casualties} of
+your soldiers died. {number_of_soldiers} are left standing.""")
+                break
+            else:
+                print(f"\nArmy got overpowered and prince {cname} got killed... Game over.")
+                sys.exit()
+        else:
+            print("")
+
+battle_mode()
+
+print(f""" Villagers cheer in celebration of your victory! {cname} wastes no time and ask the villagers for the location
+of the bandit outpost. They point to the western mountain and the group heads on.""")
+
+proceed()
+inventory_check()
+proceed()
+
+opponent_name = "outpost bandits"
+opponent_quantity = random.randint(12, 14)
+opponent_luck = 0.1
+opponent_break = 2 + int(war_cry)
+
+print(f""" {cname} and his soldiers arrive at the outpost where {opponent_quantity} {opponent_name} await ready to
+attack. The bandit leader screams at you: 'You may have defeated my raiders, but you will never leave this place alive!
+""")
+
+battle_mode()
+
+print(f""" After defeating the threat from the west, {cname} returns to his king where he is declared
+lord of the western lands! """)
